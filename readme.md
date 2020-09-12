@@ -3,7 +3,6 @@
 ![npm](https://img.shields.io/npm/v/time-fast-forward)
 ![GitHub](https://img.shields.io/github/license/ZitRos/time-fast-forward)
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/ZitRos/time-fast-forward/NPM%20package)
-![Codecov](https://img.shields.io/codecov/c/github/ZitRos/time-fast-forward)
 
 Fake the system time (Date) in your tests, without freezing it (unlike in many other libraries).
 

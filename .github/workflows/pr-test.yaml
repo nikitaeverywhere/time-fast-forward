@@ -1,0 +1,16 @@
+name: PR test
+on:
+  pull_request:
+    branches:
+      - master
+jobs:
+  build-test-publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
+      with:
+        node-version: '12.x'
+    - run: npm install
+    - run: npm test

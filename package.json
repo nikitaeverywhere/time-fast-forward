@@ -1,6 +1,6 @@
 {
   "name": "time-fast-forward",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": "Fake the system time (Date) in your tests, without freezing it (unlike in many other libraries). Freeze only when you need.",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -8,8 +8,8 @@
     "/lib"
   ],
   "scripts": {
-    "test": "npm run build && nyc --reporter=lcov mocha --exit --timeout 5000 -r ts-node/register tests/**/*.test.ts",
-    "coverage": "codecov",
+    "test": "npm run build && nyc mocha --exit --timeout 5000 -r ts-node/register tests/**/*.test.ts",
+    "posttest": "nyc report --reporter=lcov",
     "build": "prettier --write ./src && tsc"
   },
   "repository": {
@@ -45,7 +45,6 @@
     "@types/mocha": "^8.0.3",
     "@types/node": "^14.10.1",
     "chai": "^4.2.0",
-    "codecov": "^3.7.2",
     "mocha": "^8.1.3",
     "nyc": "^15.1.0",
     "prettier": "^2.1.1",
