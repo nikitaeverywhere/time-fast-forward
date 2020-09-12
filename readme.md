@@ -4,7 +4,9 @@
 ![GitHub](https://img.shields.io/github/license/ZitRos/time-fast-forward)
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/ZitRos/time-fast-forward/NPM%20package)
 
-Fake the system time (Date, hrtime) in your tests, without freezing it (unlike in many other libraries).
+Control the system time (Date, hrtime) in your tests, without freezing it (unlike in many other libraries).
+
+Mock date and time both in NodeJS and web applications. Supports typescript.
 
 ## Installation
 
@@ -17,7 +19,7 @@ npm install --save-dev time-fast-forward
 ```ts
 import { jumpToTime, shiftTimeBy, resetTime } from 'time-fast-forward';
 
-console.log(new Date());                    // -> Sat Sep 12 2020 01:18:21
+console.log(new Date());                      // -> Sat Sep 12 2020 01:18:21
 
 // Add one hour to the current clock
 shiftTimeBy(60 * 60 * 1000);
