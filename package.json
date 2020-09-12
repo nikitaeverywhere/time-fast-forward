@@ -1,6 +1,6 @@
 {
   "name": "time-fast-forward",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Fake the system time (Date) in your tests, without freezing it (unlike in many other libraries). Freeze only when you need.",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
