@@ -1,0 +1,27 @@
+name: NPM package
+on:
+  push:
+    branches:
+      - master
+env:
+  CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+jobs:
+  build-test-publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
+      with:
+        node-version: '12.x'
+    - run: (echo "//npm.pkg.github.com/:_authToken=${NPM_TOKEN}"; cat .npmrc) > .npmrc2 && mv .npmrc2 .npmrc
+      env:
+        NPM_TOKEN: ${{ env.NPM_TOKEN }}
+    - run: npm install
+    - run: npm run build
+    - run: npm test
+    - run: npm run coverage -- -t ${{ env.CODECOV_TOKEN }}
+    - uses: JS-DevTools/npm-publish@v1
+      with:
+        token: ${{ env.NPM_TOKEN }}
