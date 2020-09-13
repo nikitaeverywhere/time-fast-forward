@@ -1,6 +1,7 @@
 import { jumpToTime, shiftTimeBy, resetTime } from '../src';
 import 'mocha';
 import { expect, assert } from 'chai';
+import { FakeDate } from '../src/FakeDate';
 
 const OriginalDate = Date;
 const SECOND = 1000;
@@ -35,6 +36,31 @@ describe('Basic tests', () => {
     jumpToTime(HOUR);
 
     assert.notStrictEqual(Date, OriginalDate);
+  });
+
+  it('full date constructors are equal', () => {
+    const date1 = new Date(2020, 2, 2, 2);
+    jumpToTime(HOUR);
+    const date2 = new Date(2020, 2, 2, 2);
+
+    assertEqualsOrABitMore(date1.getTime(), date2.getTime());
+  });
+
+  it('works with window object', () => {
+    global.window = {} as any;
+    global.window.Date = Date;
+    shiftTimeBy(HOUR);
+
+    assert.strictEqual(global.window.Date, FakeDate);
+
+    resetTime();
+
+    assert.strictEqual(global.window.Date, OriginalDate);
+
+    resetTime();
+
+    assert.strictEqual(global.window.Date, OriginalDate);
+    global.window = undefined as any;
   });
 
   it('instances are original date', () => {
@@ -137,14 +163,14 @@ describe('Basic tests', () => {
     shiftTimeBy(HOUR * 100500);
     jumpToTime(1580601600000);
 
-    assert.equal(new Date().toISOString(), '2020-02-02T00:00:00.000Z');
+    assert.equal(new Date().toISOString().indexOf('2020-02-02T00:00:00.'), 0);
   });
 
   it('jumps to the exact Date date without the time shift', () => {
     shiftTimeBy(HOUR * 100500);
     jumpToTime(new Date(1580601600000));
 
-    assert.equal(new Date().toISOString(), '2020-02-02T00:00:00.000Z');
+    assert.equal(new Date().toISOString().indexOf('2020-02-02T00:00:00.'), 0);
   });
 
   it('shifting time does not affect previously created dates', () => {
@@ -216,6 +242,22 @@ describe('Basic tests', () => {
         (process.hrtime.bigint() - testStartHrTimeBigInt) / BigInt(1000000)
       ).valueOf(),
       HOUR
+    );
+  });
+
+  it('nodejs hrtime() should correctly add milliseconds', async () => {
+    shiftTimeBy(HOUR + 999);
+
+    await sleep(1);
+    const hrtime = process.hrtime();
+
+    assertEqualsOrABitMore(
+      new Number(
+        (BigInt(hrtime[0] * 1000000000 + hrtime[1]) - testStartHrTimeBigInt) /
+          BigInt(1000000) -
+          BigInt(HOUR + 1000)
+      ).valueOf(),
+      0
     );
   });
 });

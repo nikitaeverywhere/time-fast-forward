@@ -9,6 +9,7 @@ export const shiftTimeBy = (milliseconds: number) => {
   fakeDate();
   setTimeShift(getCurrentTimeShift() + milliseconds);
 };
+
 export const jumpToTime = (value: number | string | Date) => {
   if (typeof (value as Date).getTime === 'function') {
     value = (value as Date).getTime();
@@ -20,6 +21,7 @@ export const jumpToTime = (value: number | string | Date) => {
   const now = Date.now();
   setTimeShift(jumpTo - now + getCurrentTimeShift());
 };
+
 export const resetTime = () => {
   restoreDate();
 };

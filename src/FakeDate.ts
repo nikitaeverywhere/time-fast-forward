@@ -8,8 +8,8 @@ export const fakeDate = () => {
   if (FakeDate === Date) {
     return;
   }
-  if (global.window) {
-    global.window.Date = FakeDate as any;
+  if (typeof window !== 'undefined') {
+    window.Date = FakeDate as any;
   } else {
     global.Date = FakeDate as any;
     process.hrtime = patchedProcessHrTime as any;
@@ -17,12 +17,15 @@ export const fakeDate = () => {
 };
 
 export const restoreDate = () => {
-  if (OriginalDate === Date) {
-    return;
-  }
-  if (global.window) {
-    global.window.Date = OriginalDate;
+  if (typeof window !== 'undefined') {
+    if (OriginalDate === window.Date) {
+      return;
+    }
+    window.Date = OriginalDate;
   } else {
+    if (OriginalDate === global.Date) {
+      return;
+    }
     global.Date = OriginalDate;
     process.hrtime = originalProcessHrTime;
   }
@@ -31,7 +34,7 @@ export const restoreDate = () => {
 
 function patchedProcessHrTime(...args: any[]): NodeJS.HRTime {
   const result = originalProcessHrTime.call(process, ...args) as any;
-  result[0] += Math.round(globalTimeShift / 1000);
+  result[0] += Math.floor(globalTimeShift / 1000);
   result[1] += (globalTimeShift % 1000) * 1000000; // ms -> ns
   if (result[1] >= 1000000000) {
     // if nanoseconds > 1s
@@ -84,7 +87,15 @@ export class FakeDate extends Date {
       case 1:
         return new OriginalDate(y!);
       default:
-        return new OriginalDate(y as number, m as number, d, h, M, s, ms);
+        return new OriginalDate(
+          y as number,
+          m as number,
+          d ?? 1,
+          h ?? 0,
+          M ?? 0,
+          s ?? 0,
+          ms ?? 0
+        );
     }
   }
 }
