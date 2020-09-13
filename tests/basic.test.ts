@@ -1,4 +1,4 @@
-import { jumpToTime, shiftTimeBy, resetTime } from '..';
+import { jumpToTime, shiftTimeBy, resetTime } from '../src';
 import 'mocha';
 import { expect, assert } from 'chai';
 
